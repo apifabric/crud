@@ -1,0 +1,327 @@
+about:
+  date: October 30, 2024 07:04:49
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 10
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Account:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: company_id
+    - name: account_number
+      required: true
+    - name: balance
+    - name: account_type
+      required: true
+    description: Represents an account associated with a company.
+    info_list: Represents an account associated with a company.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - account_id
+      name: TransactionList
+      resource: Transaction
+    - direction: toone
+      fks:
+      - company_id
+      name: company
+      resource: Company
+    type: Account
+    user_key: id
+  Company:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: address
+    - name: id
+    description: Represents a company within the system.
+    info_list: Represents a company within the system.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - company_id
+      name: AccountList
+      resource: Account
+    - direction: tomany
+      fks:
+      - company_id
+      name: OrderList
+      resource: Order
+    type: Company
+    user_key: name
+  Customer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: email
+    - name: id
+    description: Represents customers of the company.
+    info_list: Represents customers of the company.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: CustomerHistoryList
+      resource: CustomerHistory
+    - direction: tomany
+      fks:
+      - customer_id
+      name: PaymentList
+      resource: Payment
+    type: Customer
+    user_key: name
+  CustomerHistory:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: interaction_date
+      type: DATETIME
+    - name: interaction_detail
+    description: Represents historical interactions of customers.
+    info_list: Represents historical interactions of customers.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: CustomerHistory
+    user_key: id
+  Inventory:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+    - name: stock_quantity
+      required: true
+    description: Represents the inventory records for products.
+    info_list: Represents the inventory records for products.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Inventory
+    user_key: id
+  Order:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: company_id
+    - name: order_date
+      type: DATETIME
+    - name: total_amount
+    description: Represents an order placed by a company.
+    info_list: Represents an order placed by a company.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: toone
+      fks:
+      - company_id
+      name: company
+      resource: Company
+    type: Order
+    user_key: id
+  OrderItem:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+    - name: product_id
+    - name: quantity
+      required: true
+    - name: price
+      required: true
+    description: Represents items within an order.
+    info_list: Represents items within an order.
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: OrderItem
+    user_key: id
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: payment_date
+      type: DATETIME
+    - name: amount
+      required: true
+    description: Records payments made to the company.
+    info_list: Records payments made to the company.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Payment
+    user_key: id
+  Product:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: description
+    - name: price
+      required: true
+    - name: id
+    description: Represents a product offered by the company.
+    info_list: Represents a product offered by the company.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - product_id
+      name: InventoryList
+      resource: Inventory
+    - direction: tomany
+      fks:
+      - product_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: tomany
+      fks:
+      - product_id
+      name: SupplyList
+      resource: Supply
+    type: Product
+    user_key: name
+  Supplier:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: contact
+    - name: id
+    description: Represents suppliers for products.
+    info_list: Represents suppliers for products.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: SupplyList
+      resource: Supply
+    type: Supplier
+    user_key: name
+  Supply:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+    - name: supplier_id
+    - name: supply_date
+      type: DATETIME
+    - name: quantity_supplied
+      required: true
+    description: Represents supply records from suppliers to the company.
+    info_list: Represents supply records from suppliers to the company.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: Supply
+    user_key: id
+  Transaction:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: account_id
+    - name: transaction_date
+      type: DATETIME
+    - name: amount
+      required: true
+    description: Records transactions related to accounts.
+    info_list: Records transactions related to accounts.
+    tab_groups:
+    - direction: toone
+      fks:
+      - account_id
+      name: account
+      resource: Account
+    type: Transaction
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

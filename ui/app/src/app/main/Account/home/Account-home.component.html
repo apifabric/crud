@@ -1,0 +1,46 @@
+<o-form-layout-manager attr="Account" mode="tab" title="ACCOUNT">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="AccountTable" 
+            service="Account" 
+            entity="Account" 
+            title="ACCOUNT"
+            keys="id"
+            columns="id;company_id;account_number;balance;account_type" 
+            header-actions="R;D"
+            visible-columns="id;company_id;account_number;balance;account_type"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="company_id" title="company_id">
+    <o-table-cell-renderer-service attr="company_id" 
+        service="Company" entity="CompanyType" columns="id;name"
+        parent-keys="id:company_id"
+        value-column="name" keys="company_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column #account_number attr="account_number" title="account_number" editable="no" required="yes" content-align="left"></o-table-column>
+            
+            <o-table-column #balance attr="balance" title="balance" type="currency" editable="no" required="no" currency-symbol="$" currency-symbol-position="left" thousand-separator=","decimal-separator="."></o-table-column>
+            
+            <o-table-column #account_type attr="account_type" title="account_type" editable="no" required="yes" content-align="left"></o-table-column>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>
